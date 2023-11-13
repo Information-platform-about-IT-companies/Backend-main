@@ -240,7 +240,3 @@ fabric.properties
 # VSCode
 .vscode/
 .DS_Store
-
-#Media files
-**/media/*
-!**/media/static
