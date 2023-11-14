@@ -3,6 +3,8 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from users.models import User
+
 
 class Industry(models.Model):
     name = models.CharField(max_length=200)
@@ -89,13 +91,39 @@ class Company(models.Model):
         return self.name
 
 
+class FavoritesList(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="favorite",
+    )
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        verbose_name="Компания",
+        related_name="favorite",
+    )
+
+    class Meta:
+        verbose_name = "Избранное"
+        verbose_name_plural = "Избранное"
+        ordering = ("company",)
+        constraints = [
+            models.UniqueConstraint(fields=["user", "company"], name="unique_favorite")
+        ]
+
+    def __str__(self):
+        return f"{self.company} {self.user}"
+
+
 class Phone(models.Model):
     company = models.ForeignKey(
         Company,
         on_delete=models.CASCADE,
         related_name="phones",
     )
-    number = models.CharField(max_length=18)
+    number = models.CharField(max_length=18, null=True)
 
     def __str__(self):
         return self.number
