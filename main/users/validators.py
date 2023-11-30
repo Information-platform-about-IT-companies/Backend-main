@@ -1,3 +1,5 @@
+"""Validators for User model fields."""
+
 import re
 
 from django.conf import settings
@@ -62,7 +64,7 @@ def validate_first_name_and_last_name_fields(input_string):
 class CustomEmailValidator(EmailValidator):
     """Django EmailValidator with custom user_regex."""
 
-    user_regex = _lazy_re_compile(
-        r"(^[-_0-9A-Z]+(\.[-_0-9A-Z]+)*\Z",
+    EmailValidator.user_regex = _lazy_re_compile(
+        r"^[0-9A-Z]+([-|_]?[0-9A-Z]+)*(\.[0-9A-Z]+([-|_]?[0-9A-Z]+)*)*$",
         re.IGNORECASE,
     )
