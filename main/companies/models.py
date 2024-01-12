@@ -1,4 +1,5 @@
 """Database settings of the 'Companies' app."""
+import datetime
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -108,11 +109,14 @@ class Favorite(models.Model):
         verbose_name="Компания",
         related_name="in_favorite",
     )
+    date_added = models.DateTimeField(
+        verbose_name="Дата добавления в избранное", default=datetime.datetime.today
+    )
 
     class Meta:
         verbose_name = "Избранное"
         verbose_name_plural = "Избранное"
-        ordering = ("company",)
+        ordering = ("-date_added",)
         constraints = [
             models.UniqueConstraint(fields=["user", "company"], name="unique_favorite")
         ]
