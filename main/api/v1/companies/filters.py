@@ -11,19 +11,11 @@ class CompanyFilterSet(filters.FilterSet):
     city = filters.ModelMultipleChoiceFilter(
         field_name="city", to_field_name="id", queryset=City.objects.all()
     )
-    is_favorited = filters.BooleanFilter(
-        field_name="is_favorited", method="get_is_favorited_filter"
-    )
+    is_favorited = filters.BooleanFilter()
 
     class Meta:
         model = Company
         fields = ("city", "service", "is_favorited")
-
-    def get_is_favorited_filter(self, queryset, name, value):
-        user = self.request.user
-        if value and user.is_authenticated:
-            return queryset.filter(in_favorite__user=user)
-        return queryset
 
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
